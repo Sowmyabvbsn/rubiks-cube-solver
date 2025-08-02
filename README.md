@@ -2,7 +2,6 @@
 
 A web-based interactive 3D Rubik's Cube solver that can solve any scrambled cube configuration within 20 moves using advanced algorithms.
 
-![Rubik's Cube Solver](https://via.placeholder.com/800x400/1c2024/ffffff?text=Rubik%27s+Cube+Solver)
 
 ## 🎯 Overview
 
