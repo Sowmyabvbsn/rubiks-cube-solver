@@ -84,7 +84,9 @@ class RubiksCubeApp {
         
         // Listen for cube events
         document.addEventListener('cubeStateChanged', (event) => {
-            this.handleCubeStateChange(event.detail);
+            if (event.detail) {
+                this.handleCubeStateChange(event.detail);
+            }
         });
         
         document.addEventListener('cubeSolved', () => {
@@ -185,10 +187,12 @@ class RubiksCubeApp {
 
     handleCubeStateChange(state) {
         // Update move count
-        this.uiManager.updateMoveCount(state.moveCount || 0);
+        if (this.uiManager && state) {
+            this.uiManager.updateMoveCount(state.moveCount || 0);
+        }
         
         // Update status based on cube state
-        if (state.isSolved) {
+        if (state && state.isSolved) {
             this.uiManager.updateStatus('Solved');
         } else if (state.isScrambled) {
             this.uiManager.updateStatus('Scrambled');
@@ -198,13 +202,20 @@ class RubiksCubeApp {
     }
 
     handleCubeSolved() {
-        this.uiManager.showToast('success', 'Congratulations!', 'You solved the cube!');
-        this.uiManager.updateStatus('Solved');
+        if (this.uiManager) {
+            this.uiManager.showToast('success', 'Congratulations!', 'You solved the cube!');
+            this.uiManager.updateStatus('Solved');
+        }
     }
 
     handleCubeScrambled() {
-        this.uiManager.updateStatus('Scrambled');
-        document.getElementById('explainBtn').disabled = true;
+        if (this.uiManager) {
+            this.uiManager.updateStatus('Scrambled');
+        }
+        const explainBtn = document.getElementById('explainBtn');
+        if (explainBtn) {
+            explainBtn.disabled = true;
+        }
     }
 
     showLoading() {

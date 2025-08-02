@@ -122,7 +122,7 @@ class UIManager {
     // Modal Management
     showModal(modalId) {
         const modal = document.getElementById(modalId);
-        if (modal) {
+        if (modal && !modal.classList.contains('active')) {
             modal.classList.add('active');
             
             // Focus management
@@ -207,7 +207,7 @@ class UIManager {
     // Terminal Management
     updateTerminal(message) {
         const terminal = document.getElementById('terminal');
-        if (terminal) {
+        if (terminal && message) {
             // Create new terminal line
             const line = document.createElement('div');
             line.className = 'terminal-line';
@@ -244,7 +244,7 @@ class UIManager {
     // Toast Notifications
     showToast(type, title, message, duration = 5000) {
         const container = document.getElementById('toastContainer');
-        if (!container) return;
+        if (!container || !type || !title || !message) return;
         
         const toast = document.createElement('div');
         toast.className = `toast ${type}`;
@@ -292,7 +292,7 @@ class UIManager {
                 this.settings = { ...this.settings, ...JSON.parse(saved) };
             }
         } catch (error) {
-            console.warn('Failed to load settings:', error);
+            console.warn('Failed to load settings from localStorage');
         }
         
         // Apply loaded settings to UI
@@ -303,7 +303,7 @@ class UIManager {
         try {
             localStorage.setItem('rubiksCubeSettings', JSON.stringify(this.settings));
         } catch (error) {
-            console.warn('Failed to save settings:', error);
+            console.warn('Failed to save settings to localStorage');
         }
     }
 

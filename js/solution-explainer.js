@@ -47,21 +47,33 @@ class SolutionExplainer {
 
     bind() {
         // Bind event listeners for solution modal
-        document.getElementById('startSolutionBtn').addEventListener('click', () => {
-            this.startExplanation();
-        });
+        const startBtn = document.getElementById('startSolutionBtn');
+        if (startBtn) {
+            startBtn.addEventListener('click', () => {
+                this.startExplanation();
+            });
+        }
         
-        document.getElementById('prevStepBtn').addEventListener('click', () => {
-            this.previousStep();
-        });
+        const prevBtn = document.getElementById('prevStepBtn');
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => {
+                this.previousStep();
+            });
+        }
         
-        document.getElementById('nextStepBtn').addEventListener('click', () => {
-            this.nextStep();
-        });
+        const nextBtn = document.getElementById('nextStepBtn');
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                this.nextStep();
+            });
+        }
         
-        document.getElementById('closeSolutionModal').addEventListener('click', () => {
-            this.closeSolutionModal();
-        });
+        const closeBtn = document.getElementById('closeSolutionModal');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                this.closeSolutionModal();
+            });
+        }
     }
 
     async init() {
@@ -69,12 +81,20 @@ class SolutionExplainer {
     }
 
     setSolution(solutionString) {
+        if (!solutionString || typeof solutionString !== 'string') {
+            console.warn('Invalid solution string provided');
+            return;
+        }
+        
         this.solution = solutionString;
         this.steps = this.parseSolutionIntoSteps(solutionString);
         this.currentStepIndex = 0;
         
         // Update algorithm display
-        document.getElementById('algorithmText').textContent = solutionString;
+        const algorithmText = document.getElementById('algorithmText');
+        if (algorithmText) {
+            algorithmText.textContent = solutionString;
+        }
         
         console.log('Solution set:', solutionString);
         console.log('Parsed into', this.steps.length, 'steps');
@@ -206,6 +226,11 @@ class SolutionExplainer {
         const currentStepElement = document.getElementById('currentStep');
         const stepVisualizationElement = document.getElementById('stepVisualization');
         
+        if (!currentStepElement || !stepVisualizationElement) {
+            console.warn('Step display elements not found');
+            return;
+        }
+        
         if (this.steps.length === 0) {
             currentStepElement.innerHTML = `
                 <h3>No Solution Available</h3>
@@ -277,6 +302,11 @@ class SolutionExplainer {
         const progressFill = document.getElementById('solutionProgress');
         const progressText = document.getElementById('progressText');
         
+        if (!progressFill || !progressText) {
+            console.warn('Progress bar elements not found');
+            return;
+        }
+        
         if (this.steps.length === 0) {
             progressFill.style.width = '0%';
             progressText.textContent = 'No steps available';
@@ -290,7 +320,9 @@ class SolutionExplainer {
 
     closeSolutionModal() {
         const modal = document.getElementById('solutionModal');
-        modal.classList.remove('active');
+        if (modal) {
+            modal.classList.remove('active');
+        }
         this.isExplaining = false;
     }
 

@@ -844,6 +844,7 @@ body {
 /* Custom scrollbar */
 ::-webkit-scrollbar {
     width: 8px;
+    height: 8px;
 }
 
 ::-webkit-scrollbar-track {
@@ -883,4 +884,18 @@ select:focus {
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
+}
+
+/* Error prevention */
+.cube-container canvas {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Prevent text selection on buttons */
+.btn {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }

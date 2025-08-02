@@ -9,7 +9,7 @@ let cubeGL;
 
 // Utility functions from original code
 function typeInfo(sentence, if_del) {
-    if (window.rubiksCubeApp && window.rubiksCubeApp.uiManager) {
+    if (window.rubiksCubeApp && window.rubiksCubeApp.uiManager && sentence) {
         window.rubiksCubeApp.uiManager.updateTerminal(sentence);
     }
 }
@@ -50,22 +50,27 @@ function convertAlg(alg) {
 
 // Enhanced solve function with step tracking
 function solveWithSteps() {
-    if (!cubeGL || !cube) return null;
+    if (!window.cubeGL || !window.cube) {
+        console.warn('Cube not initialized');
+        return null;
+    }
     
     updateCube();
     
-    if (cubeGL.isSolved()) {
+    if (window.cubeGL.isSolved && window.cubeGL.isSolved()) {
         typeInfo("The cube is already solved.", false);
         return null;
     }
     
     try {
-        const solveString = cube.solve();
+        const solveString = window.cube.solve();
         console.log('Solution found:', solveString);
         
         if (solveString) {
             const solve_step = convertAlg(solveString);
-            cubeGL.twist(solve_step);
+            if (window.cubeGL.twist) {
+                window.cubeGL.twist(solve_step);
+            }
             typeInfo("Solution: " + solveString, false);
             
             return solveString;
@@ -81,41 +86,56 @@ function solveWithSteps() {
 }
 
 function updateCube() {
-    if (!cubeGL || !cube) return;
+    if (!window.cubeGL || !window.cube) {
+        console.warn('Cube not initialized for update');
+        return;
+    }
     
     let cubeStringColor = "", cubeStringFaces = "";
 
     let read = [8, 7, 6, 5, 4, 3, 2, 1, 0];
     for (let i = 0; i <= 8; i++) {
-        cubeStringColor += cubeGL.up.cubelets[read[i]].up.color.initial;
+        if (window.cubeGL.up && window.cubeGL.up.cubelets[read[i]]) {
+            cubeStringColor += window.cubeGL.up.cubelets[read[i]].up.color.initial;
+        }
     }
     for (let i = 0; i <= 8; i++) {
-        cubeStringColor += cubeGL.right.cubelets[read[i]].right.color.initial;
+        if (window.cubeGL.right && window.cubeGL.right.cubelets[read[i]]) {
+            cubeStringColor += window.cubeGL.right.cubelets[read[i]].right.color.initial;
+        }
     }
     for (let i = 0; i <= 8; i++) {
-        cubeStringColor += cubeGL.front.cubelets[read[i]].front.color.initial;
+        if (window.cubeGL.front && window.cubeGL.front.cubelets[read[i]]) {
+            cubeStringColor += window.cubeGL.front.cubelets[read[i]].front.color.initial;
+        }
     }
 
     read = [2, 5, 8, 1, 4, 7, 0, 3, 6];
     for (let i = 0; i <= 8; i++) {
-        cubeStringColor += cubeGL.down.cubelets[read[i]].down.color.initial;
+        if (window.cubeGL.down && window.cubeGL.down.cubelets[read[i]]) {
+            cubeStringColor += window.cubeGL.down.cubelets[read[i]].down.color.initial;
+        }
     }
 
     read = [6, 3, 0, 7, 4, 1, 8, 5, 2];
     for (let i = 0; i <= 8; i++) {
-        cubeStringColor += cubeGL.left.cubelets[read[i]].left.color.initial;
+        if (window.cubeGL.left && window.cubeGL.left.cubelets[read[i]]) {
+            cubeStringColor += window.cubeGL.left.cubelets[read[i]].left.color.initial;
+        }
     }
     for (let i = 0; i <= 8; i++) {
-        cubeStringColor += cubeGL.back.cubelets[read[i]].back.color.initial;
+        if (window.cubeGL.back && window.cubeGL.back.cubelets[read[i]]) {
+            cubeStringColor += window.cubeGL.back.cubelets[read[i]].back.color.initial;
+        }
     }
 
     const cubeOriginColors = [
-        {pos: "U", color: cubeGL.up.cubelets[4].up.color.initial},
-        {pos: "R", color: cubeGL.right.cubelets[4].right.color.initial},
-        {pos: "F", color: cubeGL.front.cubelets[4].front.color.initial},
-        {pos: "D", color: cubeGL.down.cubelets[4].down.color.initial},
-        {pos: "L", color: cubeGL.left.cubelets[4].left.color.initial},
-        {pos: "B", color: cubeGL.back.cubelets[4].back.color.initial}
+        {pos: "U", color: window.cubeGL.up?.cubelets[4]?.up?.color?.initial || 'U'},
+        {pos: "R", color: window.cubeGL.right?.cubelets[4]?.right?.color?.initial || 'R'},
+        {pos: "F", color: window.cubeGL.front?.cubelets[4]?.front?.color?.initial || 'F'},
+        {pos: "D", color: window.cubeGL.down?.cubelets[4]?.down?.color?.initial || 'D'},
+        {pos: "L", color: window.cubeGL.left?.cubelets[4]?.left?.color?.initial || 'L'},
+        {pos: "B", color: window.cubeGL.back?.cubelets[4]?.back?.color?.initial || 'B'}
     ];
 
     for (let i = 0; i < cubeStringColor.length; i++) {
@@ -126,7 +146,10 @@ function updateCube() {
             }
         }
     }
-    cube = Cube.fromString(cubeStringFaces);
+    
+    if (typeof Cube !== 'undefined' && cubeStringFaces.length > 0) {
+        window.cube = Cube.fromString(cubeStringFaces);
+    }
 }
 
 // Initialize cube when document is ready
@@ -137,8 +160,16 @@ $(document).ready(function() {
 
 // Expose functions globally for backward compatibility
 window.solve = solve;
-window.cubeScramble = cubeScramble;
-window.cubeReset = cubeReset;
+window.cubeScramble = function() {
+    if (window.rubiksCubeApp && window.rubiksCubeApp.cubeController) {
+        window.rubiksCubeApp.cubeController.scramble();
+    }
+};
+window.cubeReset = function() {
+    if (window.rubiksCubeApp && window.rubiksCubeApp.cubeController) {
+        window.rubiksCubeApp.cubeController.reset();
+    }
+};
 window.typeInfo = typeInfo;
 window.convertAlg = convertAlg;
 window.updateCube = updateCube;

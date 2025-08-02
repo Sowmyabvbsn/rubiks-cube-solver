@@ -24,35 +24,51 @@ class CubeController {
             console.log('Initializing Cube Controller...');
             
             // Initialize cubejs
-            window.cube = new Cube();
-            Cube.initSolver();
+            if (typeof Cube !== 'undefined') {
+                window.cube = new Cube();
+                Cube.initSolver();
+            } else {
+                throw new Error('Cube library not loaded');
+            }
 
             // Initialize cuber (3D visualization)
             const useLockedControls = true;
-            const controls = useLockedControls ? ERNO.Locked : ERNO.Freeform;
+            const controls = (typeof ERNO !== 'undefined' && useLockedControls) ? ERNO.Locked : ERNO.Freeform;
 
             const ua = navigator.userAgent;
             const isIe = ua.indexOf('MSIE') > -1 || ua.indexOf('Trident/') > -1;
 
-            window.cubeGL = new ERNO.Cube({
-                hideInvisibleFaces: true,
-                controls: controls,
-                renderer: isIe ? ERNO.renderers.IeCSS3D : null
-            });
-
-            const container = document.getElementById('cubeContainer');
-            container.appendChild(cubeGL.domElement);
-
-            if (controls === ERNO.Locked) {
-                const fixedOrientation = new THREE.Euler(Math.PI * 0.1, Math.PI * -0.25, 0);
-                cubeGL.object3D.lookAt(cubeGL.camera.position);
-                cubeGL.rotation.x += fixedOrientation.x;
-                cubeGL.rotation.y += fixedOrientation.y;
-                cubeGL.rotation.z += fixedOrientation.z;
+            if (typeof ERNO !== 'undefined') {
+                window.cubeGL = new ERNO.Cube({
+                    hideInvisibleFaces: true,
+                    controls: controls,
+                    renderer: isIe && ERNO.renderers.IeCSS3D ? ERNO.renderers.IeCSS3D : null
+                });
+            } else {
+                throw new Error('ERNO library not loaded');
             }
 
-            cubeGL.twistDuration = 300;
-            cubeGL.twist('Xy');
+            const container = document.getElementById('cubeContainer');
+            if (container && window.cubeGL && window.cubeGL.domElement) {
+                container.appendChild(window.cubeGL.domElement);
+            }
+
+            if (typeof THREE !== 'undefined' && controls === ERNO.Locked && window.cubeGL) {
+                const fixedOrientation = new THREE.Euler(Math.PI * 0.1, Math.PI * -0.25, 0);
+                if (window.cubeGL.object3D && window.cubeGL.camera) {
+                    window.cubeGL.object3D.lookAt(window.cubeGL.camera.position);
+                    window.cubeGL.rotation.x += fixedOrientation.x;
+                    window.cubeGL.rotation.y += fixedOrientation.y;
+                    window.cubeGL.rotation.z += fixedOrientation.z;
+                }
+            }
+
+            if (window.cubeGL) {
+                window.cubeGL.twistDuration = 300;
+                if (typeof window.cubeGL.twist === 'function') {
+                    window.cubeGL.twist('Xy');
+                }
+            }
 
             // Store references
             this.cube = window.cube;
@@ -72,23 +88,29 @@ class CubeController {
 
     setupCubeEventListeners() {
         // Listen for cube twist events to update move count
-        this.cubeGL.addEventListener('onTwistComplete', (event) => {
-            this.moveCount++;
-            this.dispatchCubeEvent('cubeStateChanged', {
-                moveCount: this.moveCount,
-                isSolved: this.cubeGL.isSolved(),
-                isScrambled: this.moveCount > 0 && !this.cubeGL.isSolved()
+        if (this.cubeGL && typeof this.cubeGL.addEventListener === 'function') {
+            this.cubeGL.addEventListener('onTwistComplete', (event) => {
+                this.moveCount++;
+                this.dispatchCubeEvent('cubeStateChanged', {
+                    moveCount: this.moveCount,
+                    isSolved: this.cubeGL.isSolved(),
+                    isScrambled: this.moveCount > 0 && !this.cubeGL.isSolved()
+                });
+                
+                if (this.cubeGL.isSolved()) {
+                    this.dispatchCubeEvent('cubeSolved');
+                }
             });
-            
-            if (this.cubeGL.isSolved()) {
-                this.dispatchCubeEvent('cubeSolved');
-            }
-        });
+        }
     }
 
     dispatchCubeEvent(eventName, detail = {}) {
-        const event = new CustomEvent(eventName, { detail });
-        document.dispatchEvent(event);
+        try {
+            const event = new CustomEvent(eventName, { detail });
+            document.dispatchEvent(event);
+        } catch (error) {
+            console.warn('Failed to dispatch cube event:', eventName, error);
+        }
     }
 
     async solve() {
@@ -287,7 +309,7 @@ class CubeController {
     }
 
     isSolved() {
-        return this.cubeGL ? this.cubeGL.isSolved() : false;
+        return this.cubeGL && typeof this.cubeGL.isSolved === 'function' ? this.cubeGL.isSolved() : false;
     }
 
     getMoveCount() {
@@ -296,17 +318,17 @@ class CubeController {
 
     // Manual rotation methods
     rotateFace(face) {
-        if (!this.isReady) return;
+        if (!this.isReady || !this.cubeGL || typeof this.cubeGL.twist !== 'function') return;
         
         this.cubeGL.twist(face);
     }
 
     // Get current cube state for analysis
     getCubeState() {
-        if (!this.isReady) return null;
+        if (!this.isReady || !this.cubeGL) return null;
         
         return {
-            isSolved: this.cubeGL.isSolved(),
+            isSolved: typeof this.cubeGL.isSolved === 'function' ? this.cubeGL.isSolved() : false,
             moveCount: this.moveCount,
             isReady: this.isReady
         };
