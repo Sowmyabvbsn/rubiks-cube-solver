@@ -1,374 +1,132 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>Rubik's Cube Solver - Interactive 3D Puzzle</title>
-    <meta name="description" content="Interactive 3D Rubik's Cube Solver with step-by-step solution guide">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="assets/favicon.ico">
-    
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    
-    <!-- Styles -->
-    <link rel="stylesheet" type="text/css" href="lib/cuber/css/cube.css">
-    <link rel="stylesheet" type="text/css" href="styles/main.css">
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Rubik's Cube Solver</title>
+		<meta name="description" content="A Rubik's Cube Solver.">
+		<link rel="icon" type="image/png" href="assets/favicon.ico">
 
-    <!-- Cube Libraries -->
-    <script type="text/javascript" src="lib/cuber/js/vendor/tween.min.js"></script>
-    
-    <!-- Three.js -->
-    <script type="text/javascript" src="lib/cuber/js/vendor/threejs/src/Three.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/vendor/threejs/src/core/EventDispatcher.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/vendor/threejs/src/math/Math.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/vendor/threejs/src/math/Quaternion.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/vendor/threejs/src/math/Vector2.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/vendor/threejs/src/math/Vector3.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/vendor/threejs/src/math/Box3.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/vendor/threejs/src/math/Sphere.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/vendor/threejs/src/math/Euler.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/vendor/threejs/src/math/Matrix3.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/vendor/threejs/src/math/Matrix4.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/vendor/threejs/src/core/Object3D.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/vendor/threejs/src/cameras/Camera.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/vendor/threejs/src/cameras/PerspectiveCamera.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/vendor/threejs/src/math/Ray.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/vendor/threejs/src/math/Plane.js"></script>
+		<!-- Font -->
+		<link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
 
-    <!-- Cube Core -->
-    <script type="text/javascript" src="lib/cuber/js/ERNO.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/vendor/CSS3DRenderer.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/utils/utils.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/utils/Number.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/utils/String.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/utils/Array.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/colors.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/directions.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/queues.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/twists.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/cubelets.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/groups.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/slices.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/folds.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/projector.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/interaction.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/controls.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/cubes.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/solvers.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/renderer.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/jquery-3.4.0.min.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/extras/renderers/iecss3d.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/extras/renderers/ierenderer.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/extras/controls/locked.js"></script>
-    <script type="text/javascript" src="lib/cuber/js/extras/deviceMotion.js"></script>
+		<!------ CSS ------>
+		<link rel="stylesheet" type="text/css" href="lib/cuber/css/cube.css">
+		<link rel="stylesheet" type="text/css" href="cube/css/style.css">
 
-    <!-- Two-phase Algorithm -->
-    <script type="text/javascript" src="lib/cubejs/cube.js"></script>
-    <script type="text/javascript" src="lib/cubejs/solve.js"></script>
+		<!-- Cube source code -->
+		<script type="text/javascript" src="lib/cuber/js/vendor/tween.min.js"></script>
 
-    <!-- Typewriting Plugin -->
-    <script type="text/javascript" src="lib/typewriting/typewriting.js"></script>
+		<!--  Three.js  -->
+		<script type="text/javascript" src="lib/cuber/js/vendor/threejs/src/Three.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/vendor/threejs/src/core/EventDispatcher.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/vendor/threejs/src/math/Math.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/vendor/threejs/src/math/Quaternion.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/vendor/threejs/src/math/Vector2.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/vendor/threejs/src/math/Vector3.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/vendor/threejs/src/math/Box3.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/vendor/threejs/src/math/Sphere.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/vendor/threejs/src/math/Euler.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/vendor/threejs/src/math/Matrix3.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/vendor/threejs/src/math/Matrix4.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/vendor/threejs/src/core/Object3D.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/vendor/threejs/src/cameras/Camera.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/vendor/threejs/src/cameras/PerspectiveCamera.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/vendor/threejs/src/math/Ray.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/vendor/threejs/src/math/Plane.js"></script>
 
-    <!-- Application Scripts -->
-    <script type="text/javascript" src="js/app.js"></script>
-    <script type="text/javascript" src="js/cube-controller.js"></script>
-    <script type="text/javascript" src="js/solution-explainer.js"></script>
-    <script type="text/javascript" src="js/ui-manager.js"></script>
-</head>
+		<!--  Cube internals  -->
+		<script type="text/javascript" src="lib/cuber/js/ERNO.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/vendor/CSS3DRenderer.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/utils/utils.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/utils/Number.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/utils/String.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/utils/Array.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/colors.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/directions.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/queues.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/twists.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/cubelets.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/groups.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/slices.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/folds.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/projector.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/interaction.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/controls.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/cubes.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/solvers.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/renderer.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/jquery-3.4.0.min.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/extras/renderers/iecss3d.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/extras/renderers/ierenderer.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/extras/controls/locked.js"></script>
+		<script type="text/javascript" src="lib/cuber/js/extras/deviceMotion.js"></script>
 
-<body>
-    <!-- Header -->
-    <header class="header">
-        <div class="header-content">
-            <div class="logo">
-                <i class="fas fa-cube"></i>
-                <h1>Rubik's Cube Solver</h1>
-            </div>
-            <div class="header-actions">
-                <button class="btn btn-secondary" id="helpBtn">
-                    <i class="fas fa-question-circle"></i>
-                    Help
-                </button>
-                <button class="btn btn-secondary" id="settingsBtn">
-                    <i class="fas fa-cog"></i>
-                    Settings
-                </button>
-            </div>
-        </div>
-    </header>
+		<!-- Two-phase Algorithm  -->
+		<script type="text/javascript" src="lib/cubejs/cube.js"></script>
+		<script type="text/javascript" src="lib/cubejs/solve.js"></script>
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <!-- Cube Container -->
-        <div class="cube-section">
-            <div class="cube-container" id="cubeContainer">
-                <!-- Cube will be rendered here -->
-            </div>
-            
-            <!-- Cube Status -->
-            <div class="cube-status">
-                <div class="status-item">
-                    <span class="status-label">Status:</span>
-                    <span class="status-value" id="cubeStatus">Ready</span>
-                </div>
-                <div class="status-item">
-                    <span class="status-label">Moves:</span>
-                    <span class="status-value" id="moveCount">0</span>
-                </div>
-                <div class="status-item">
-                    <span class="status-label">Time:</span>
-                    <span class="status-value" id="timer">00:00</span>
-                </div>
-            </div>
-        </div>
+		<!-- Typewriting Plugin -->
+		<script type="text/javascript" src="lib/typewriting/typewriting.js"></script>
 
-        <!-- Control Panel -->
-        <div class="control-panel">
-            <!-- Main Actions -->
-            <div class="action-section">
-                <h3>Main Actions</h3>
-                <div class="action-grid">
-                    <button class="btn btn-primary btn-large" id="solveBtn">
-                        <i class="fas fa-magic"></i>
-                        Solve Cube
-                    </button>
-                    <button class="btn btn-warning btn-large" id="scrambleBtn">
-                        <i class="fas fa-random"></i>
-                        Scramble
-                    </button>
-                    <button class="btn btn-secondary btn-large" id="resetBtn">
-                        <i class="fas fa-undo"></i>
-                        Reset
-                    </button>
-                    <button class="btn btn-info btn-large" id="explainBtn" disabled>
-                        <i class="fas fa-lightbulb"></i>
-                        Explain Solution
-                    </button>
-                </div>
-            </div>
+		<script type="text/javascript" src="cube/js/info.js"></script>
+		<script type="text/javascript" src="cube/js/init.js"></script>
+		<script type="text/javascript" src="cube/js/solve.js"></script>
+		<script type="text/javascript" src="cube/js/util.js"></script>
+	</head>
 
-            <!-- Manual Controls -->
-            <div class="manual-controls">
-                <h3>Manual Rotation</h3>
-                <div class="rotation-grid">
-                    <div class="rotation-group">
-                        <label>Front/Back</label>
-                        <div class="btn-group">
-                            <button class="btn btn-sm" onclick="cubeGL.twist('F')">F</button>
-                            <button class="btn btn-sm" onclick="cubeGL.twist('f')">F'</button>
-                            <button class="btn btn-sm" onclick="cubeGL.twist('B')">B</button>
-                            <button class="btn btn-sm" onclick="cubeGL.twist('b')">B'</button>
-                        </div>
-                    </div>
-                    <div class="rotation-group">
-                        <label>Right/Left</label>
-                        <div class="btn-group">
-                            <button class="btn btn-sm" onclick="cubeGL.twist('R')">R</button>
-                            <button class="btn btn-sm" onclick="cubeGL.twist('r')">R'</button>
-                            <button class="btn btn-sm" onclick="cubeGL.twist('L')">L</button>
-                            <button class="btn btn-sm" onclick="cubeGL.twist('l')">L'</button>
-                        </div>
-                    </div>
-                    <div class="rotation-group">
-                        <label>Up/Down</label>
-                        <div class="btn-group">
-                            <button class="btn btn-sm" onclick="cubeGL.twist('U')">U</button>
-                            <button class="btn btn-sm" onclick="cubeGL.twist('u')">U'</button>
-                            <button class="btn btn-sm" onclick="cubeGL.twist('D')">D</button>
-                            <button class="btn btn-sm" onclick="cubeGL.twist('d')">D'</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+	<body>
+		<div id="container"></div>
+		<div class="type">
+			<div id="terminal"></div>
+		</div>
+		<div class="solve">
+			<button onclick="solve()">Solve</button>
+			<button onclick="cubeScramble()">Scramble</button>
+			<button onclick="cubeReset()">Reset</button>
+			<button id="infoButton" class="info-button">Info</button>
+		</div>
+		<div class="twist">
+			<h1>Rotate</h1>
+			<button onclick="cubeGL.twist('F')">F</button>
+			<button onclick="cubeGL.twist('f')">F'</button><br>
+			<button onclick="cubeGL.twist('R')">R</button>
+			<button onclick="cubeGL.twist('r')">R'</button>
+			<button onclick="cubeGL.twist('U')">U</button>
+			<button onclick="cubeGL.twist('u')">U'</button><br>
+			<button onclick="cubeGL.twist('B')">B</button>
+			<button onclick="cubeGL.twist('b')">B'</button><br>
+			<button onclick="cubeGL.twist('L')">L</button>
+			<button onclick="cubeGL.twist('l')">L'</button><br>
+			<button onclick="cubeGL.twist('D')">D</button>
+			<button onclick="cubeGL.twist('d')">D'</button><br>
+		</div>
 
-            <!-- Terminal Output -->
-            <div class="terminal-section">
-                <h3>Output</h3>
-                <div class="terminal" id="terminal">
-                    <div class="terminal-line">
-                        <span class="prompt">></span>
-                        <span class="terminal-text" id="terminalText">Welcome to Rubik's Cube Solver</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- Solution Steps Modal -->
-    <div class="modal" id="solutionModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Solution Steps</h2>
-                <button class="modal-close" id="closeSolutionModal">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="solution-progress">
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="solutionProgress"></div>
-                    </div>
-                    <span class="progress-text" id="progressText">Step 0 of 0</span>
-                </div>
-                
-                <div class="solution-content">
-                    <div class="current-step" id="currentStep">
-                        <h3>Ready to solve</h3>
-                        <p>Click "Start Solution" to begin the step-by-step explanation.</p>
-                    </div>
-                    
-                    <div class="step-visualization" id="stepVisualization">
-                        <!-- Step-specific visualization will be shown here -->
-                    </div>
-                </div>
-                
-                <div class="solution-controls">
-                    <button class="btn btn-secondary" id="prevStepBtn" disabled>
-                        <i class="fas fa-chevron-left"></i>
-                        Previous
-                    </button>
-                    <button class="btn btn-primary" id="startSolutionBtn">
-                        <i class="fas fa-play"></i>
-                        Start Solution
-                    </button>
-                    <button class="btn btn-secondary" id="nextStepBtn" disabled>
-                        Next
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-                
-                <div class="solution-algorithm" id="algorithmDisplay">
-                    <h4>Complete Algorithm:</h4>
-                    <div class="algorithm-text" id="algorithmText">
-                        Solution will appear here...
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Help Modal -->
-    <div class="modal" id="helpModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>How to Use</h2>
-                <button class="modal-close" id="closeHelpModal">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="help-section">
-                    <h3>Getting Started</h3>
-                    <ul>
-                        <li><strong>Scramble:</strong> Click the scramble button to randomize the cube</li>
-                        <li><strong>Solve:</strong> Click solve to automatically solve the cube in under 20 moves</li>
-                        <li><strong>Manual Control:</strong> Use the rotation buttons or click and drag the cube</li>
-                        <li><strong>Explain Solution:</strong> Get a step-by-step breakdown of the solving process</li>
-                    </ul>
-                </div>
-                
-                <div class="help-section">
-                    <h3>Notation Guide</h3>
-                    <div class="notation-grid">
-                        <div class="notation-item">
-                            <strong>F:</strong> Front face clockwise
-                        </div>
-                        <div class="notation-item">
-                            <strong>F':</strong> Front face counter-clockwise
-                        </div>
-                        <div class="notation-item">
-                            <strong>R:</strong> Right face clockwise
-                        </div>
-                        <div class="notation-item">
-                            <strong>R':</strong> Right face counter-clockwise
-                        </div>
-                        <div class="notation-item">
-                            <strong>U:</strong> Up face clockwise
-                        </div>
-                        <div class="notation-item">
-                            <strong>U':</strong> Up face counter-clockwise
-                        </div>
-                        <div class="notation-item">
-                            <strong>B:</strong> Back face clockwise
-                        </div>
-                        <div class="notation-item">
-                            <strong>B':</strong> Back face counter-clockwise
-                        </div>
-                        <div class="notation-item">
-                            <strong>L:</strong> Left face clockwise
-                        </div>
-                        <div class="notation-item">
-                            <strong>L':</strong> Left face counter-clockwise
-                        </div>
-                        <div class="notation-item">
-                            <strong>D:</strong> Down face clockwise
-                        </div>
-                        <div class="notation-item">
-                            <strong>D':</strong> Down face counter-clockwise
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Settings Modal -->
-    <div class="modal" id="settingsModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Settings</h2>
-                <button class="modal-close" id="closeSettingsModal">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="setting-group">
-                    <label for="animationSpeed">Animation Speed</label>
-                    <input type="range" id="animationSpeed" min="100" max="1000" value="300" step="50">
-                    <span id="speedValue">300ms</span>
-                </div>
-                
-                <div class="setting-group">
-                    <label for="autoRotate">Auto Rotate</label>
-                    <label class="toggle">
-                        <input type="checkbox" id="autoRotate">
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-                
-                <div class="setting-group">
-                    <label for="showNotation">Show Move Notation</label>
-                    <label class="toggle">
-                        <input type="checkbox" id="showNotation" checked>
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-                
-                <div class="setting-group">
-                    <label for="theme">Theme</label>
-                    <select id="theme">
-                        <option value="dark">Dark</option>
-                        <option value="light">Light</option>
-                        <option value="auto">Auto</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Loading Overlay -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-content">
-            <div class="loading-spinner"></div>
-            <p>Initializing Cube...</p>
-        </div>
-    </div>
-
-    <!-- Toast Notifications -->
-    <div class="toast-container" id="toastContainer"></div>
-
-    <!-- Application Scripts -->
-    <script type="text/javascript" src="js/init.js"></script>
-</body>
+		<!-- Modal for instructions -->
+		<div id="infoModal" class="modal">
+			<span class="close">&times;</span>
+			<div class="modal-content">
+				<h2>Instructions</h2>
+				<p>Here's how to use the Rubik's Cube:</p>
+				<ul class="instructions-list">
+					<li><strong>Solve:</strong> Solves the cube (within 20 moves!)</li>
+					<li><strong>Scramble:</strong> Scrambles the cube to a random state.</li>
+					<li><strong>Reset:</strong> Resets the cube to its solved state.</li>
+					<li><strong>Rotate:</strong> Use the buttons to rotate different faces of the cube.</li>
+				</ul>
+				<h2>Notation</h2>
+				<p>The following represent clockwise directions:</p>
+				<ul class="instructions-list">
+					<li><strong>F:</strong> Front</li>
+					<li><strong>R:</strong> Right</li>
+					<li><strong>U:</strong> Up</li>
+					<li><strong>B:</strong> Back</li>
+					<li><strong>L:</strong> Left</li>
+					<li><strong>D:</strong> Down</li>
+				</ul>
+				<p>The prime symbol (') represents a counterclockwise direction, and the number 2 represents a 180 degree rotation.</p>
+				<h2><a href="https://github.com/justinhwang24/rubiks-cube-solver" target="_blank">GitHub</a></h2>
+				<p>Created by Justin Hwang</p>
+			</div>
+		</div>
+	</body>
 </html>
